@@ -1,7 +1,9 @@
 # Software-Engineering-Final
 
 Students:
+
 Gabriel Cardenas
+
 Gabriel Gutierrez
 
 This is a webapp designed to help students navigate campus life.
