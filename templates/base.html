@@ -1,21 +1,52 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>CampusHub</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CampusHub{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
+    <header class="site-header">
+        <div class="container nav-bar">
+            <div class="logo">
+                <a href="/">CampusHub</a>
+            </div>
 
-    <!-- Navbar -->
-    <nav>
-        <h2>CampusHub</h2>
-        <a href="/">Home</a>
-    </nav>
+            <nav class="nav-links">
+                <a href="/">Home</a>
+                <a href="#">Events</a>
+                <a href="{% url 'map' %}">Map</a>
+                <a href="{% url 'calendar' %}">Calendar</a>
+            </nav>
 
-    <hr>
+            <div class="nav-actions">
+                {% if user.is_authenticated %}
+                    <span class="welcome-text">Hi, {{ user.username }}</span>
 
-    <!-- Page Content -->
-    {% block content %}
-    {% endblock %}
+                    <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline">Log Out</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-outline">Log In</a>
+                    <a href="{% url 'signup' %}" class="btn btn-solid">Sign Up</a>
+                {% endif %}
+            </div>
+    </header>
 
+    <main class="container main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>CampusHub for student campus life.</p>
+        </div>
+    </footer>
 </body>
 </html>

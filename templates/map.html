@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Map | CampusHub{% endblock %}
+
+{% block content %}
+
+<section class="detail-section">
+    <div class="detail-card">
+        <h1 class="detail-title">Campus Event Map</h1>
+        <p>Browse where events are happening across campus.</p>
+    </div>
+</section>
+
+<section class="map-page-section">
+    <div class="map-layout">
+        <div class="map-list-card">
+            <h2>Event Locations</h2>
+
+            {% if events %}
+                <div class="map-event-list">
+                    {% for event in events %}
+                        <div class="map-event-item">
+                            <h3>
+                                <a href="{% url 'event_detail' event.id %}" class="event-title-link">
+                                    {{ event.title }}
+                                </a>
+                            </h3>
+                            <p><strong>Location:</strong> {{ event.location }}</p>
+                            <p><strong>Date:</strong> {{ event.date }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No events available.</p>
+            {% endif %}
+        </div>
+
+        <div class="map-card">
+            <div id="full-map"></div>
+        </div>
+    </div>
+</section>
+
+{{ map_events|json_script:"full-map-data" }}
+
+<script>
+    const fullMapData = JSON.parse(document.getElementById('full-map-data').textContent);
+
+    const fullMap = L.map('full-map').setView([26.2034, -98.2300], 14);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(fullMap);
+
+    const validMapEvents = fullMapData.filter(event => event.latitude && event.longitude);
+
+    validMapEvents.forEach(event => {
+        const marker = L.marker([event.latitude, event.longitude]).addTo(fullMap);
+
+        marker.bindPopup(`
+            <strong>${event.title}</strong><br>
+            ${event.location}<br>
+            ${event.date}<br>
+            <a href="/event/${event.id}/">View Details</a>
+        `);
+    });
+
+    if (validMapEvents.length > 0) {
+        const bounds = L.latLngBounds(validMapEvents.map(event => [event.latitude, event.longitude]));
+        fullMap.fitBounds(bounds, { padding: [30, 30] });
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Calendar | CampusHub{% endblock %}
+
+{% block content %}
+
+<section class="detail-section">
+    <div class="detail-card">
+        <h1 class="detail-title">{{ month_name }} {{ year }}</h1>
+        <p class="calendar-today"><strong>Today:</strong> {{ today }}</p>
+        <p>Browse this month's campus events.</p>
+    </div>
+</section>
+
+<section class="detail-section">
+    <div class="detail-card">
+        <div class="month-calendar">
+            <div class="calendar-header">Sunday</div>
+            <div class="calendar-header">Monday</div>
+            <div class="calendar-header">Tuesday</div>
+            <div class="calendar-header">Wednesday</div>
+            <div class="calendar-header">Thursday</div>
+            <div class="calendar-header">Friday</div>
+            <div class="calendar-header">Saturday</div>
+
+            {% for week in calendar_rows %}
+                {% for cell in week %}
+                    {% if cell.day == 0 %}
+                        <div class="calendar-day empty-day"></div>
+                    {% else %}
+                        <div class="calendar-day {% if cell.is_today %}today-cell{% endif %} {% if cell.events %}event-day{% endif %}">
+                            <div class="day-number">{{ cell.day }}</div>
+
+                            {% if cell.events %}
+                                <div class="day-events">
+                                    {% for event in cell.events %}
+                                        <a href="{% url 'event_detail' event.id %}" class="event-pill">
+                                            {{ event.title }}
+                                        </a>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="event-hover-box">
+                                    {% for event in cell.events %}
+                                        <div class="hover-event-item">
+                                            <strong>{{ event.title }}</strong><br>
+                                            {{ event.date|time:"g:i A" }}<br>
+                                            {{ event.location }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

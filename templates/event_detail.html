@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ event.title }} | CampusHub{% endblock %}
+
+{% block content %}
+
+<section class="join-section">
+    <div class="join-card">
+        <h1>{{ event.title }}</h1>
+        <p><strong>Location:</strong> {{ event.location }}</p>
+        <p><strong>Date:</strong> {{ event.date }}</p>
+        <p><strong>Description:</strong></p>
+        <p>{{ event.description }}</p>
+
+        <hr style="margin: 20px 0;">
+
+        {% if user.is_authenticated %}
+            {% if user in event.attendees.all %}
+                <p><strong>You already RSVP’d for this event.</strong></p>
+            {% else %}
+                <form action="{% url 'rsvp_event' event.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-solid">RSVP to this Event</button>
+                </form>
+            {% endif %}
+        {% else %}
+            <p>You need an account to RSVP.</p>
+            <a href="{% url 'login' %}" class="btn btn-outline">Log In to RSVP</a>
+        {% endif %}
+
+        <div style="margin-top: 20px;">
+            <a href="{% url 'home' %}" class="btn btn-outline">Back to Home</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
