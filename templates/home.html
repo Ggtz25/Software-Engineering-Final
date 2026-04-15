@@ -5,14 +5,15 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-    <section class="join-section">
-        <div class="join-card">
-            <h2>Welcome back, {{ user.username }}!</h2>
-            <p>You are logged in and can now RSVP, save events, and comment.</p>
-        </div>
-    </section>
+<section class="join-section">
+    <div class="join-card">
+        <h2>Welcome back, {{ user.username }}!</h2>
+        <p>You are logged in and can now RSVP, save events, and comment.</p>
+    </div>
+</section>
 {% endif %}
 
+<!-- HERO -->
 <section class="hero-section">
     <div class="hero-text">
         <h1>Discover campus events, spaces, and student activities</h1>
@@ -20,27 +21,32 @@
             Browse what is happening around campus, check locations on the map,
             and keep up with upcoming events in one place.
         </p>
+
         <div class="hero-buttons">
-            <a href="#" class="btn btn-solid">Explore Events</a>
-            <a href="#" class="btn btn-outline">View Map</a>
+            <a href="{% url 'events' %}" class="btn btn-solid">Explore Events</a>
+            <a href="{% url 'map' %}" class="btn btn-outline">View Map</a>
         </div>
     </div>
 </section>
 
+<!-- MAP + CALENDAR -->
 <section class="info-grid">
+
+    <!-- MAP -->
     <div class="info-card">
         <h2>Event Map</h2>
 
         <div id="homepage-map"></div>
 
         <p class="section-text">
-            Find where events are happening and see what is near you on campus.
+            Find where events are happening across campus.
         </p>
-        <p class="section-link">Explore event locations</p>
+        <p class="section-link">
+            <a href="{% url 'map' %}">Open Full Map</a>
+        </p>
     </div>
 
-    
-
+    <!-- MINI CALENDAR -->
     <a href="{% url 'calendar' %}" class="info-card-link">
         <div class="info-card">
             <h2>Campus Calendar</h2>
@@ -67,14 +73,15 @@
             </div>
 
             <p class="section-text">
-                Keep track of upcoming campus activities and important dates.
+                Keep track of upcoming campus activities.
             </p>
-
             <p class="section-link">Open Full Calendar</p>
         </div>
     </a>
+
 </section>
 
+<!-- EVENTS PREVIEW -->
 <section class="join-section">
     <div class="join-card">
         <h2>Upcoming Events</h2>
@@ -87,16 +94,19 @@
                             {{ event.title }}
                         </a>
                     </h3>
+
                     <p><strong>Location:</strong> {{ event.location }}</p>
                     <p><strong>Date:</strong> {{ event.date }}</p>
-                    <p>{{ event.description }}</p>
 
                     <div class="hero-buttons">
-                        <a href="{% url 'event_detail' event.id %}" class="btn btn-outline">View Details</a>
+
+                        <a href="{% url 'event_detail' event.id %}" class="btn btn-outline">
+                            View Details
+                        </a>
 
                         {% if user.is_authenticated %}
                             {% if user in event.attendees.all %}
-                                <p><strong>You already RSVP’d</strong></p>
+                                <p><strong>RSVP’d</strong></p>
                             {% else %}
                                 <form action="{% url 'rsvp_event' event.id %}" method="post">
                                     {% csrf_token %}
@@ -104,46 +114,39 @@
                                 </form>
                             {% endif %}
                         {% else %}
-                            <a href="{% url 'login' %}" class="btn btn-outline">Log in to RSVP</a>
+                            <a href="{% url 'login' %}" class="btn btn-outline">
+                                Log in to RSVP
+                            </a>
                         {% endif %}
+
                     </div>
                 </div>
             {% endfor %}
         {% else %}
-            <p>No events added yet.</p>
+            <p>No events yet.</p>
         {% endif %}
     </div>
 </section>
 
+<!-- LOGIN PROMPT -->
 {% if not user.is_authenticated %}
 <section class="join-section">
     <div class="join-card">
         <h2>Want more features?</h2>
         <p>
-            You can browse events without an account. To RSVP, save events,
-            comment, or get notifications, create an account or log in.
+            To RSVP, save events, comment, or get notifications,
+            create an account or log in.
         </p>
+
         <div class="hero-buttons">
             <a href="{% url 'signup' %}" class="btn btn-solid">Create Account</a>
             <a href="{% url 'login' %}" class="btn btn-outline">Log In</a>
         </div>
     </div>
 </section>
-{% else %}
-<section class="join-section">
-    <div class="join-card">
-        <h2>Your Activity</h2>
-        <p>
-            You can now RSVP to events, save your favorites, and interact with others.
-        </p>
-        <div class="hero-buttons">
-            <a href="#" class="btn btn-solid">View My Events</a>
-            <a href="#" class="btn btn-outline">Explore More</a>
-        </div>
-    </div>
-</section>
 {% endif %}
 
+<!-- MAP SCRIPT -->
 {{ map_events|json_script:"events-data" }}
 
 <script>
@@ -155,7 +158,7 @@
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    const validEvents = eventData.filter(event => event.latitude && event.longitude);
+    const validEvents = eventData.filter(e => e.latitude && e.longitude);
 
     validEvents.forEach(event => {
         const marker = L.marker([event.latitude, event.longitude]).addTo(map);
@@ -163,12 +166,13 @@
         marker.bindPopup(`
             <strong>${event.title}</strong><br>
             ${event.location}<br>
-            ${event.date}
+            ${event.date}<br>
+            <a href="/event/${event.id}/">View Details</a>
         `);
     });
 
     if (validEvents.length > 0) {
-        const bounds = L.latLngBounds(validEvents.map(event => [event.latitude, event.longitude]));
+        const bounds = L.latLngBounds(validEvents.map(e => [e.latitude, e.longitude]));
         map.fitBounds(bounds, { padding: [20, 20] });
     }
 </script>

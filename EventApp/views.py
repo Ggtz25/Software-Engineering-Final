@@ -51,6 +51,10 @@ def rsvp_event(request, event_id):
     event.attendees.add(request.user)
     return redirect('event_detail', event_id=event.id)
 
+def events_view(request):
+    events = Event.objects.all()
+    return render(request, 'events.html', {'events': events})
+
 def event_detail(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     return render(request, 'event_detail.html', {'event': event})

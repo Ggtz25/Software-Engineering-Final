@@ -5,48 +5,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}CampusHub{% endblock %}</title>
+
+    <!-- Main CSS -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    <!-- Leaflet (Map) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
+
 <body>
-    <header class="site-header">
-        <div class="container nav-bar">
-            <div class="logo">
-                <a href="/">CampusHub</a>
-            </div>
 
-            <nav class="nav-links">
-                <a href="/">Home</a>
-                <a href="#">Events</a>
-                <a href="{% url 'map' %}">Map</a>
-                <a href="{% url 'calendar' %}">Calendar</a>
-            </nav>
+<header class="site-header">
+    <div class="container nav-bar">
 
-            <div class="nav-actions">
-                {% if user.is_authenticated %}
-                    <span class="welcome-text">Hi, {{ user.username }}</span>
-
-                    <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-outline">Log Out</button>
-                    </form>
-                {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-outline">Log In</a>
-                    <a href="{% url 'signup' %}" class="btn btn-solid">Sign Up</a>
-                {% endif %}
-            </div>
-    </header>
-
-    <main class="container main-content">
-        {% block content %}
-        {% endblock %}
-    </main>
-
-    <footer class="site-footer">
-        <div class="container">
-            <p>CampusHub for student campus life.</p>
+        <div class="logo">
+            <a href="{% url 'home' %}">CampusHub</a>
         </div>
-    </footer>
+
+        <nav class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'events' %}">Events</a>
+            <a href="{% url 'map' %}">Map</a>
+            <a href="{% url 'calendar' %}">Calendar</a>
+        </nav>
+
+        <div class="nav-actions">
+            {% if user.is_authenticated %}
+                <span class="welcome-text">Hi, {{ user.username }}</span>
+
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline">Log Out</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline">Log In</a>
+                <a href="{% url 'signup' %}" class="btn btn-solid">Sign Up</a>
+            {% endif %}
+        </div>
+
+    </div>
+</header>
+
+<main class="container main-content">
+    {% block content %}
+    {% endblock %}
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p>CampusHub for student campus life.</p>
+    </div>
+</footer>
+
 </body>
 </html>

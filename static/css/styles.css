@@ -460,3 +460,14 @@ body {
         height: 420px;
     }
 }
+.events-page-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 800px) {
+    .events-page-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Events | CampusHub{% endblock %}
+
+{% block content %}
+<section class="detail-section">
+    <div class="detail-card">
+        <h1 class="detail-title">Campus Events</h1>
+
+        {% if events %}
+            {% for event in events %}
+                <div class="event-card">
+                    <h3>
+                        <a href="{% url 'event_detail' event.id %}" class="event-title-link">
+                            {{ event.title }}
+                        </a>
+                    </h3>
+                    <p><strong>Date:</strong> {{ event.date }}</p>
+                    <p><strong>Location:</strong> {{ event.location }}</p>
+                    <p>{{ event.description }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No events available yet.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
