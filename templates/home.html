@@ -29,6 +29,26 @@
     </div>
 </section>
 
+<!-- CREATE EVENT SECTION -->
+{% if user.is_authenticated %}
+<section class="join-section">
+    <div class="join-card">
+        <h2>Want to host an event?</h2>
+
+        <p>
+            Students and campus organizations can create and share their own
+            events with the community.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="{% url 'add_event' %}" class="btn btn-solid">
+                Create Event
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
 <!-- MAP + CALENDAR -->
 <section class="info-grid">
 
