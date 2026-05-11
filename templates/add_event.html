@@ -1,13 +1,60 @@
 {% extends 'base.html' %}
 
-{% block title %}Add Event{% endblock %}
+{% block title %}Create Event | CampusHub{% endblock %}
 
 {% block content %}
-<h1>Add a Campus Event</h1>
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit Event</button>
-</form>
+<section class="join-section">
+    <div class="join-card event-form-card">
+
+        <h1>Create a Campus Event</h1>
+
+        <p class="form-subtext">
+            Share student activities, club meetings, workshops, tournaments,
+            and campus gatherings with everyone.
+        </p>
+
+        <form method="POST" class="event-form">
+            {% csrf_token %}
+
+            <div class="form-row">
+                <label>Event Title</label>
+                {{ form.title }}
+            </div>
+
+            <div class="form-row">
+                <label>Description</label>
+                {{ form.description }}
+            </div>
+
+            <div class="form-row">
+                <label>Location</label>
+                {{ form.location }}
+            </div>
+
+            <div class="form-row">
+                <label>Date & Time</label>
+                {{ form.date }}
+            </div>
+
+            <div class="form-row">
+                <label>Latitude</label>
+                {{ form.latitude }}
+            </div>
+
+            <div class="form-row">
+                <label>Longitude</label>
+                {{ form.longitude }}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-solid">
+                    Create Event
+                </button>
+            </div>
+        </form>
+
+    </div>
+</section>
+
 {% endblock %}

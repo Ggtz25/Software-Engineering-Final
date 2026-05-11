@@ -471,3 +471,62 @@ body {
         grid-template-columns: 1fr;
     }
 }
+.event-form-card {
+    max-width: 850px;
+    margin: 40px auto;
+    padding: 35px;
+    border-radius: 28px;
+}
+
+.form-subtext {
+    margin-bottom: 30px;
+    color: #5f4b3a;
+}
+
+.event-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    align-items: center;
+    gap: 20px;
+}
+
+.form-row label {
+    font-weight: 700;
+    color: #3f2d22;
+    text-align: right;
+}
+
+.event-form input,
+.event-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 2px solid #d6c1a7;
+    background: #fffaf5;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.event-form textarea {
+    min-height: 80px;
+    max-height: 220px;
+    resize: vertical;
+}
+
+.event-form input:focus,
+.event-form textarea:focus {
+    outline: none;
+    border-color: #9c7a5b;
+    box-shadow: 0 0 8px rgba(156, 122, 91, 0.25);
+}
+
+.form-actions {
+    margin-left: 190px;
+    margin-top: 10px;
+}
